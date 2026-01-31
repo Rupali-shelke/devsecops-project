@@ -15,15 +15,17 @@ pipeline {
         }
 
         stage('SonarQube Code Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    sonar-scanner \
-                    -Dsonar.projectKey=devsecops-project \
-                    -Dsonar.sources=src
-                    '''
+	    steps {
+		withSonarQubeEnv('SonarQube') {
+                    script {
+                        def scannerHome = tool 'SonarScanner'
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=devsecops-project \
+                        -Dsonar.sources=.
+                        """
+                    }
                 }
             }
         }
-    }
-}
+

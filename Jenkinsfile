@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 pipeline {
     agent any
 
@@ -12,5 +12,4 @@ pipeline {
         }
     }
 }
-=======
->>>>>>> Stashed changes
+

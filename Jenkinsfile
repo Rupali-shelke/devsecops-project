@@ -1,20 +1,16 @@
 pipeline {
     agent any
 
-    environment {
-        SONARQUBE_SERVER = 'SonarQube'
-    }
-
     stages {
 
         stage('Clone Code') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/your-username/devsecops-project.git'
+                    url: 'https://github.com/Rupali-shelke/devsecops-project.git'
             }
         }
 
-        stage('SonarQube Code Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh '''
@@ -23,6 +19,12 @@ pipeline {
                     -Dsonar.sources=src
                     '''
                 }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t devsecops-app:${BUILD_NUMBER} .'
             }
         }
     }

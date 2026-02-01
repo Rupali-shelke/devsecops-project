@@ -16,7 +16,7 @@ pipeline {
                     sh '''
                     sonar-scanner \
                     -Dsonar.projectKey=devsecops-project \
-                    -Dsonar.sources=src
+                    -Dsonar.sources=.
                     '''
                 }
             }

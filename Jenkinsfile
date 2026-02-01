@@ -16,7 +16,7 @@ pipeline {
                     sh '''
                     sonar-scanner \
                     -Dsonar.projectKey=devsecops-Project \
-                    -Dsonar.sources=.
+                    -Dsonar.sources=src
                     '''
                 }
             }
@@ -25,6 +25,17 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh 'docker build -t devsecops-app:${BUILD_NUMBER} .'
+            }
+        }
+
+        stage('Trivy Image Scan') {
+            steps {
+                sh '''
+                trivy image \
+                --severity HIGH,CRITICAL \
+                --exit-code 1 \
+                devsecops-app:${BUILD_NUMBER}
+                '''
             }
         }
     }

@@ -15,7 +15,7 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     sh '''
                     sonar-scanner \
-                    -Dsonar.projectKey=devsecops-project \
+                    -Dsonar.projectKey=devsecops-Project \
                     -Dsonar.sources=.
                     '''
                 }

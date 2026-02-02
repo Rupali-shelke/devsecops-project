@@ -45,13 +45,16 @@ pipeline {
                 withVault([vaultSecrets: [[
                     path: 'secret/app',
                     secretValues: [
-                       [envVar: 'DB_PASSWORD', vaultKey: 'db_password']
+                        [envVar: 'DB_PASSWORD', vaultKey: 'db_password']
                     ]
                 ]]]) {
-                    sh 'echo "Secret fetched successfully (value hidden)"'
+                    sh '''
+                      echo "Vault secret fetched successfully"
+                      # Secret is used internally, not printed
+                    '''
                 }
             }
-	}
+        }
     
     }    
 }

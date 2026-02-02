@@ -56,12 +56,13 @@ pipeline {
         }
 	stage('Terraform Provisioning') {
             steps {
-                sh '''
-                  terraform init
-                  terraform apply -auto-approve
-                '''
+                dir('terraform') {
+                    sh '''
+                        terraform init
+                        terraform apply -auto-approve
+                    '''
+                }
             }
         }
-    
     }    
 }

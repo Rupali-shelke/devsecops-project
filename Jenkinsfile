@@ -38,7 +38,6 @@ pipeline {
                 '''
             }
         }
-    }
 
 	stage('Fetch Secrets from Vault') {
             steps {

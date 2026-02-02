@@ -57,7 +57,6 @@ pipeline {
 	stage('Terraform Provisioning') {
             steps {
                 sh '''
-                  cd terraform
                   terraform init
                   terraform apply -auto-approve
                 '''

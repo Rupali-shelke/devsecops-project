@@ -39,7 +39,7 @@ pipeline {
             }
         }
     }
-}
+
 	stage('Fetch Secrets from Vault') {
             steps {
                 withVault([vaultSecrets: [[
@@ -51,4 +51,7 @@ pipeline {
                     sh 'echo "Secret fetched successfully (value hidden)"'
                 }
             }
-        }
+	}
+    
+    }    
+}

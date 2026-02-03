@@ -42,19 +42,8 @@ pipeline {
                 """
             }
         }
-
-        stage('Terraform Provisioning') {
-            steps {
-                dir('terraform') {
-                    echo "🔹 Initializing Terraform"
-                    sh "terraform init"
-                    echo "🔹 Planning Terraform changes"
-                    sh "terraform plan -out=tfplan"
-                    echo "🔹 Applying Terraform changes"
-                    sh "terraform apply -auto-approve tfplan"
-                }
-            }
-        }
+        
+        
     }
 
     post {

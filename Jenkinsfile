@@ -7,57 +7,51 @@ pipeline {
     }
 
     stages {
+
         stage('Docker Build') {
             steps {
-                sh 'docker build -t devsecops-app:6 src/'
+                echo "🔹 Building Docker image"
+                sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} src/"
             }
         }
-
-
 
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')
-                ]) {
-                    sh '''
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                    echo "🔹 Running SonarQube Scanner"
+                    sh """
                     sonar-scanner \
-                      -Dsonar.projectKey=devsecops-Project \
-                      -Dsonar.sources=src \
-                      -Dsonar.host.url=${SONAR_HOST_URL} \
-                      -Dsonar.login=${SONAR_TOKEN} \
-                      -Dsonar.python.version=3.9
-                    '''
+                        -Dsonar.projectKey=devsecops-Project \
+                        -Dsonar.sources=src \
+                        -Dsonar.host.url=${SONAR_HOST_URL} \
+                        -Dsonar.login=${SONAR_TOKEN} \
+                        -Dsonar.python.version=3.9
+                    """
                 }
-            }
-        }
-
-        stage('Docker Build') {
-            steps {
-                sh '''
-                docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .
-                '''
             }
         }
 
         stage('Trivy Image Scan') {
             steps {
-                sh '''
+                echo "🔹 Scanning Docker image for vulnerabilities"
+                sh """
                 trivy image \
-                  --severity HIGH,CRITICAL \
-                  --exit-code 0 \
-                  ${IMAGE_NAME}:${BUILD_NUMBER}
-                '''
+                    --severity HIGH,CRITICAL \
+                    --exit-code 1 \
+                    ${IMAGE_NAME}:${BUILD_NUMBER}
+                """
             }
         }
 
         stage('Terraform Provisioning') {
             steps {
                 dir('terraform') {
-                    sh '''
-                    terraform init
-                    terraform apply -auto-approve
-                    '''
+                    echo "🔹 Initializing Terraform"
+                    sh "terraform init"
+                    echo "🔹 Planning Terraform changes"
+                    sh "terraform plan -out=tfplan"
+                    echo "🔹 Applying Terraform changes"
+                    sh "terraform apply -auto-approve tfplan"
                 }
             }
         }

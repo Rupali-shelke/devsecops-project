@@ -1,14 +1,16 @@
-# Use Python 3.9 as base image
 FROM python:3.9-slim
 
-# Set working directory inside container
 WORKDIR /app
 
-# Copy all files from current directory (src) to /app
+# Install runtime deps first (better layer caching)
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app code
 COPY . .
 
-# Install dependencies if you have any (create requirements.txt if needed)
-# RUN pip install --no-cache-dir -r requirements.txt
+# Tell Kubernetes which port the app uses
+EXPOSE 8080
 
-# Default command to run the app
+# Run the app
 CMD ["python", "app.py"]

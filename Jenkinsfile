@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "devsecops-app"
         DOCKERHUB_CREDENTIALS = "dockerhub"  // Jenkins credentials ID for Docker Hub
-        DOCKERHUB_REPO = "yourdockerhubusername/devsecops-app" // replace with your Docker Hub username
+        DOCKERHUB_REPO = "rupalishelake/devsecops-project" // replace with your Docker Hub username
         SONAR_HOST_URL = "http://192.168.80.130:9000"
     }
 

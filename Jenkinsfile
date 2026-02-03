@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         IMAGE_NAME = "devsecops-app"
+        DOCKERHUB_CREDENTIALS = "dockerhub"  // Jenkins credentials ID for Docker Hub
+        DOCKERHUB_REPO = "yourdockerhubusername/devsecops-app" // replace with your Docker Hub username
         SONAR_HOST_URL = "http://192.168.80.130:9000"
     }
 
@@ -42,8 +44,20 @@ pipeline {
                 """
             }
         }
-        
-        
+
+        stage('Docker Push') {
+            steps {
+                echo "🔹 Pushing Docker image to Docker Hub"
+                withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                    docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${DOCKERHUB_REPO}:${BUILD_NUMBER}
+                    docker push ${DOCKERHUB_REPO}:${BUILD_NUMBER}
+                    """
+                }
+            }
+        }
+
     }
 
     post {

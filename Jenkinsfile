@@ -7,12 +7,12 @@ pipeline {
     }
 
     stages {
+stage('Docker Build') {
+    steps {
+        sh 'docker build -t devsecops-app:6 src/'
+    }
+}
 
-        stage('Checkout Code') {
-            steps {
-                checkout scm
-            }
-        }
 
         stage('SonarQube Analysis') {
             steps {

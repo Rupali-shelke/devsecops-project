@@ -50,8 +50,8 @@ class DevSecOpsHandler(BaseHTTPRequestHandler):
         self.wfile.write(HTML_PAGE.encode())
 
 def run():
-    server = HTTPServer(("0.0.0.0", 5000), DevSecOpsHandler)
-    print(f"{APP_NAME} running on port 5000")
+    server = HTTPServer(("0.0.0.0", 8080), DevSecOpsHandler)
+    print(f"{APP_NAME} running on port 8080")
     server.serve_forever()
 
 if __name__ == "__main__":
